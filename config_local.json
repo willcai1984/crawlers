@@ -1,0 +1,17 @@
+{
+  "env": "local",
+  "db": {
+    "ip": "127.0.0.1",
+    "port": "27017",
+    "database": "tenders",
+    "username": "",
+    "password": "",
+    "collections": {
+      "mails": "mails",
+      "tenders": "tenders",
+      "tokens": "tokens"
+    },
+    "replica": ""
+  },
+  "log": "./log_local.conf"
+}
