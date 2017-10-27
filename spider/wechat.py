@@ -4,13 +4,12 @@
     ~~~~~~~~~~~~~~
     :copyright:...
 """
-import requests
+import datetime
 import json
 import logging
-import datetime
 
-# appid = "wxdae53badfa9b7c1b"
-# secret = "2f94a8555bef134f883a1528622797e3"
+import requests
+
 # 测试号
 appid = "wx23d964155e171297"
 secret = "80d5b0a1ba016ea4e5d7c436f42b96be"
