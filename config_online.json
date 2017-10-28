@@ -1,46 +1,17 @@
 {
-  "env": "online",
+  "env": "local",
   "db": {
-    "ip": "10.171.250.51",
+    "ip": "127.0.0.1",
     "port": "27017",
-    "database": "proxy",
-    "username": "proxy",
-    "password": "proxy_1",
+    "database": "tenders",
+    "username": "will",
+    "password": "cw88205555",
     "collections": {
-      "proxys": "free",
-      "companys": "companies",
-      "persons": "persons",
-      "mails": "mails"
+      "mails": "mails",
+      "tenders": "tenders",
+      "tokens": "tokens"
     },
-    "replica": "online"
+    "replica": ""
   },
-  "remoteApi": {
-    "baseUrl": "https://boss.qjdchina.com/cif/boss/",
-    "username": "alpha",
-    "password": "qianjindingit8"
-  },
-  "proxysFromUrl": "http://dev.kuaidaili.com/api/getproxy/?orderid=987675852033120&num=100&b_pcchrome=1&b_pcie=1&b_pcff=1&protocol=1&method=2&an_an=1&an_ha=1&quality=1&format=json&sep=1",
-  "laterCorn": "0 0 0/1 * ? *",
-  "uploadsBasePath": "/srv/upload/crawlers",
-  "logsBasePath": "/srv/logs/crawlers",
-  "retryTimes": 10,
-  "missionOnce": true,
-  "multiProcess": 10,
-  "pylog": "./log_remote.conf",
-  "mail": {
-    "receiversDaily": [
-      "caiwei@qjdchina.com",
-      "fengkongbu@qjdchina.com"
-    ],
-    "receiversWeekly": [
-      "linguqiang@qjdchina.com",
-      "fengkongbu@qjdchina.com",
-      "yingyunguanli@qjdchina.com",
-      "caiwei@qjdchina.com"
-    ],
-    "weekday": 6,
-    "zoroUrl": "http://zoro.zhuozhuwang.com/detail?id="
-  },
-  "proxyNum": 50,
-  "browser": "pj"
+  "log": "./log_remote.conf"
 }
