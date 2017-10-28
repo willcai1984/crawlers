@@ -4,8 +4,8 @@
     "ip": "127.0.0.1",
     "port": "27017",
     "database": "tenders",
-    "username": "will",
-    "password": "cw88205555",
+    "username": "tenders",
+    "password": "tenders",
     "collections": {
       "mails": "mails",
       "tenders": "tenders",
