@@ -33,9 +33,11 @@ class TenderMonitor(object):
         notice_ids = [entry["noticeID"] for entry in self.col_t.find({}, {"noticeID": 1})]
         notice_ids = list(set(notice_ids))
         tenders_zj = self.tz.get_tenders()
-        # 反转排序
-        for tender in list(reversed(tenders_zj)):
-            # 如有重复ID，跳出
+        # # 反转排序
+        # for tender in list(reversed(tenders_zj)):
+        # 正序排布，遇到重复ID，跳出
+        for tender in tenders_zj:
+            # 如有重复ID，继续
             if tender.get("noticeID") in notice_ids:
                 self.logger.info("ID %s is in DB list already" % tender.get("noticeID"))
                 break
