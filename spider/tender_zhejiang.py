@@ -30,6 +30,7 @@ class TenderZheJiang(object):
             "pubDate": None,
             "districtName": None,
             "src": 'zjcg',
+            "url": None,
             "isNotice": False
         }
 

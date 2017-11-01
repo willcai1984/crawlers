@@ -13,5 +13,10 @@
     },
     "replica": ""
   },
-  "log": "./log_local.conf"
+  "log": "./log_local.conf",
+  "mail": {
+    "receivers": [
+      "caiwei@qjdchina.com"
+    ]
+  }
 }

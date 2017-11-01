@@ -9,6 +9,7 @@ import logging
 from .mongo import Mongo
 from .tender_zhejiang import TenderZheJiang
 from .wechat import Wechat
+from .mail import Email
 
 
 class TenderMonitor(object):
@@ -24,6 +25,8 @@ class TenderMonitor(object):
         self.col_token = self.m.get_utc_col(db_info['collections']['tokens'])
         self.tz = TenderZheJiang()
         self.w = Wechat()
+        self.m = Email()
+        self.url_dict = {"zjcg": "http://www.zjzfcg.gov.cn/purchaseNotice/index.html?_=1507798106666"}
 
     def __del__(self):
         pass
@@ -40,7 +43,7 @@ class TenderMonitor(object):
             # 如有重复ID，继续
             if tender.get("noticeID") in notice_ids:
                 self.logger.info("ID %s is in DB list already" % tender.get("noticeID"))
-                break
+                continue
             is_new = True
             self.col_t.insert(tender)
             self.logger.info("ID %s is inserted into DB successfully" % tender.get("noticeID"))
@@ -73,11 +76,28 @@ class TenderMonitor(object):
             self.logger.info("Get and insert token successfully")
         return t
 
-    def notice(self, open_id):
+    def notices(self, open_ids):
         t = self._get_valid_token()
         num = self.col_t.find({"isNotice": False}).count()
         txt = 'ZJcaigou has updated %s messages, if you want to see detail info, please <a href="http://www.zjzfcg.gov.cn/purchaseNotice/index.html?_=150231123123123">click here</a>' % (
             num if num <= 99 else '99+')
-        result = self.w.send_txt(t, open_id, txt)
-        if result:
-            self.col_t.update({"isNotice": False}, {"$set": {"isNotice": True}}, False, True)
+        results = []
+        for open_id in open_ids:
+            result = self.w.send_txt(t, open_id, txt)
+            results.append(result)
+        for result in results:
+            if result:
+                self.col_t.update({"isNotice": False}, {"$set": {"isNotice": True}}, False, True)
+                self.logger.info("Update all records' is notice status to True")
+
+    def notices_mail(self):
+        is_subject = False
+        for tender in self.col_t.find({"isNotice": False}):
+            if not is_subject:
+                subject = "招投标更新%s等" % tender.get("title")
+                is_subject = True
+            self.m.process_entry(tender.get("districtName"), tender.get("bidMenu"), tender.get("title"),
+                                 self.url_dict[tender.get("src")])
+        self.m.send_txt(self.config.get("mail").get("receivers"), subject)
+        self.col_t.update({"isNotice": False}, {"$set": {"isNotice": True}}, False, True)
+        self.logger.info("Update all records' is_notice status to True successfully")

@@ -13,5 +13,11 @@
     },
     "replica": ""
   },
-  "log": "./log_remote.conf"
+  "log": "./log_remote.conf",
+  "mail": {
+    "receivers": [
+      "198406156@qq.com",
+      "yoyii@qq.com"
+    ]
+  }
 }

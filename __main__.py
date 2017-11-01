@@ -30,6 +30,5 @@ if __name__ == '__main__':
     t = TenderMonitor(config)
     is_new = t.process_tender_zj()
     if is_new:
-        for user_dict in user_dicts:
-            result = t.notice(user_dict.get("id"))
+        result = t.notices_mail()
     sys.exit(0)
