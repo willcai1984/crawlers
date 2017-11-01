@@ -99,5 +99,5 @@ class TenderMonitor(object):
             self.m.process_entry(tender.get("districtName"), tender.get("bidMenu"), tender.get("title"),
                                  self.url_dict[tender.get("src")])
         self.m.send_txt(self.config.get("mail").get("receivers"), subject)
-        self.col_t.update({"isNotice": False}, {"$set": {"isNotice": True}}, False, True)
+        self.col_t.update_many({"isNotice": False}, {"$set": {"isNotice": True}})
         self.logger.info("Update all records' is_notice status to True successfully")

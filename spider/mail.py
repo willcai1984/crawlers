@@ -10,10 +10,10 @@ import logging
 from email.mime.text import MIMEText
 
 # 第三方 SMTP 服务
-mail_host = "smtp.mxhichina.com"  # 设置服务器
-mail_user = "spiderman@qjdchina.com"  # 用户名
-mail_pass = "Hello123456"  # 口令
-sender = 'spiderman@qjdchina.com'
+mail_host = "smtp.163.com"  # 设置服务器
+mail_user = "willcai1984@163.com"  # 用户名
+mail_pass = "cw8205555"  # 口令
+sender = 'willcai1984@163.com'
 
 mail_msg_header = '''
 <h4>@All:</h4>
@@ -23,9 +23,9 @@ mail_msg_header = '''
     <tbody>
         <tr style="height: 28px;" bgcolor="#ACDDEC">
             <th width="30" align="center">ID</th>
-            <th nowrap="nowrap" align="center">地点</th>
-            <th nowrap="nowrap" align="center">类型</th>
-            <th width="120" align="center">标题</th>
+            <th width="120" nowrap="nowrap" align="center">地点</th>
+            <th width="120" nowrap="nowrap" align="center">类型</th>
+            <th align="center">标题</th>
             <th width="60" align="center">查看</th>
         </tr>'''
 
@@ -36,7 +36,7 @@ mail_msg_entry = '''
             <td align="center">%s</td>
             <td nowrap="nowrap" align="left">%s</td>
             <td nowrap="nowrap" align="left">%s</td>
-            <td align="center">%s</td>
+            <td align="left">%s</td>
             <td align="center"><a href="%s">查看</a></td>
         </tr>
 '''
