@@ -42,7 +42,7 @@ class TenderZheJiang(object):
         url = "http://manager.zjzfcg.gov.cn/cms/api/cors/getRemoteResults?"
         values = (('pageSize', '15'),
                   ('pageNo', '1'),
-                  ('noticeType', '10'),
+                  ('noticeType', '0'),
                   ('url', 'http://notice.zcy.gov.cn/new/noticeSearch'),
                   ('keyword', '存款')
                   )
