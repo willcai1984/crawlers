@@ -6,6 +6,7 @@
 """
 import datetime
 import logging
+import time
 from .mongo import Mongo
 from .tender_zhejiang import TenderZheJiang
 from .wechat import Wechat
@@ -27,6 +28,7 @@ class TenderMonitor(object):
         self.w = Wechat()
         self.m = Email()
         self.url_dict = {"zjcg": "http://www.zjzfcg.gov.cn/purchaseNotice/index.html?_=1507798106666"}
+        self.detail_url_zj = "http://www.zjzfcg.gov.cn/innerUsed_noticeDetails/index.html?noticeId=%s"
 
     def __del__(self):
         pass
@@ -94,10 +96,12 @@ class TenderMonitor(object):
         is_subject = False
         for tender in self.col_t.find({"isNotice": False}):
             if not is_subject:
-                subject = "招投标更新%s等" % tender.get("title")
+                subject = "更新%s等%s条招标信息" % (tender.get("title"), self.col_t.find({"isNotice": False}).count())
                 is_subject = True
             self.m.process_entry(tender.get("districtName"), tender.get("bidMenu"), tender.get("title"),
-                                 self.url_dict[tender.get("src")])
+                                 time.strftime("%Y-%m-%d", time.localtime(float(tender.get("pubDate")[:10]))),
+                                 self.detail_url_zj % tender.get("noticeID"))
         result = self.m.send_txt(self.config.get("mail").get("receivers"), subject)
         self.col_t.update_many({"isNotice": False}, {"$set": {"isNotice": True}})
-        self.logger.info("Update all records' is_notice status to True successfully")
+        self.logger.info(
+            "Mail send result is %s, update all records' is_notice status to True successfully" % result)

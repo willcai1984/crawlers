@@ -23,9 +23,10 @@ mail_msg_header = '''
     <tbody>
         <tr style="height: 28px;" bgcolor="#ACDDEC">
             <th width="30" align="center">ID</th>
-            <th width="120" nowrap="nowrap" align="center">地点</th>
-            <th width="120" nowrap="nowrap" align="center">类型</th>
+            <th width="90" nowrap="nowrap" align="center">地点</th>
+            <th width="90" nowrap="nowrap" align="center">类型</th>
             <th align="center">标题</th>
+            <th width="120" align="center">发布时间</th>
             <th width="60" align="center">查看</th>
         </tr>'''
 
@@ -34,9 +35,10 @@ mail_msg_footer = '''</tbody></table>'''
 mail_msg_entry = '''
         <tr style="height: 28px;">
             <td align="center">%s</td>
-            <td nowrap="nowrap" align="left">%s</td>
-            <td nowrap="nowrap" align="left">%s</td>
+            <td nowrap="nowrap" align="center">%s</td>
+            <td nowrap="nowrap" align="center">%s</td>
             <td align="left">%s</td>
+            <td align="center">%s</td>
             <td align="center"><a href="%s">查看</a></td>
         </tr>
 '''
@@ -55,8 +57,8 @@ class Email(object):
     def __del__(self):
         self.s.close()
 
-    def process_entry(self, dist, type, title, link):
-        entry_msg = mail_msg_entry % (self.id, dist, type, title, link)
+    def process_entry(self, dist, type, title, public, link):
+        entry_msg = mail_msg_entry % (self.id, dist, type, title, public, link)
         self.mail_msg_entry_list.append(entry_msg)
         self.id += 1
 
