@@ -40,10 +40,11 @@ class TenderZheJiang(object):
     def get_tenders(self):
         self._init_spider()
         url = "http://manager.zjzfcg.gov.cn/cms/api/cors/getRemoteResults?"
-        values = (('pageSize', '100'),
+        values = (('pageSize', '15'),
                   ('pageNo', '1'),
                   ('noticeType', '10'),
-                  ('url', 'http://notice.zcy.gov.cn/new/noticeSearch')
+                  ('url', 'http://notice.zcy.gov.cn/new/noticeSearch'),
+                  ('keyword', '存款')
                   )
         search_url = url + urllib.parse.urlencode(values)
         content = self.s.get_content(search_url)
