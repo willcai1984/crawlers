@@ -38,14 +38,20 @@ class TenderZheJiang(object):
     def __del__(self):
         pass
 
-    def get_tenders(self):
+    def get_tenders(self, keys=["存款", "存放"]):
         self._init_spider()
+        tenders = []
+        for key in keys:
+            tenders.extend(self._get_tenders_by_key(key))
+        return tenders
+
+    def _get_tenders_by_key(self, key):
         url = "http://manager.zjzfcg.gov.cn/cms/api/cors/getRemoteResults?"
         values = (('pageSize', '15'),
                   ('pageNo', '1'),
                   ('noticeType', '0'),
                   ('url', 'http://notice.zcy.gov.cn/new/noticeSearch'),
-                  ('keyword', '存款')
+                  ('keyword', key)
                   )
         search_url = url + urllib.parse.urlencode(values)
         content = self.s.get_content(search_url)
