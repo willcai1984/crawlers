@@ -24,7 +24,7 @@ mail_msg_header = '''
         <tr style="height: 28px;" bgcolor="#ACDDEC">
             <th width="30" align="center">ID</th>
             <th width="90" nowrap="nowrap" align="center">地点</th>
-            <th width="90" nowrap="nowrap" align="center">类型</th>
+            <th width="90" nowrap="nowrap" align="center">来源</th>
             <th align="center">标题</th>
             <th width="120" align="center">发布时间</th>
             <th width="60" align="center">查看</th>
@@ -57,8 +57,8 @@ class Email(object):
     def __del__(self):
         self.s.close()
 
-    def process_entry(self, dist, type, title, public, link):
-        entry_msg = mail_msg_entry % (self.id, dist, type, title, public, link)
+    def process_entry(self, dist, src, title, public, link):
+        entry_msg = mail_msg_entry % (self.id, dist, src, title, public, link)
         self.mail_msg_entry_list.append(entry_msg)
         self.id += 1
 

@@ -7,6 +7,7 @@
 import datetime
 import json
 import logging
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -29,7 +30,7 @@ class TenderZheJiang(object):
             "endDate": None,
             "pubDate": None,
             "districtName": None,
-            "src": 'zjcg',
+            "src": '浙江采购',
             "url": None,
             "isNotice": False
         }
@@ -57,9 +58,11 @@ class TenderZheJiang(object):
             model["bidMenu"] = article.get("mainBidMenuName")
             model["title"] = article.get("noticeTitle")
             model["projectCode"] = article.get("projectCode")
-            model["endDate"] = article.get("noticeEndDate")
-            model["pubDate"] = article.get("noticePubDate")
+            model["endDate"] = time.strftime("%Y-%m-%d", time.localtime(float(article.get("noticeEndDate")[:10])))
+            model["pubDate"] = time.strftime("%Y-%m-%d", time.localtime(float(article.get("noticePubDate")[:10])))
             model["districtName"] = article.get("districtName")
+            model["url"] = "http://www.zjzfcg.gov.cn/innerUsed_noticeDetails/index.html?noticeId=%s" % article.get(
+                "noticeId")
             tenders.append(model)
         return tenders
 

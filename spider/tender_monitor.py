@@ -6,11 +6,12 @@
 """
 import datetime
 import logging
-import time
+
+from .mail import Email
 from .mongo import Mongo
+from .tender_hangzhou import TenderHangzhou
 from .tender_zhejiang import TenderZheJiang
 from .wechat import Wechat
-from .mail import Email
 
 
 class TenderMonitor(object):
@@ -25,10 +26,9 @@ class TenderMonitor(object):
         self.col_t = self.m.get_utc_col(db_info['collections']['tenders'])
         self.col_token = self.m.get_utc_col(db_info['collections']['tokens'])
         self.tz = TenderZheJiang()
+        self.th = TenderHangzhou()
         self.w = Wechat()
         self.m = Email()
-        self.url_dict = {"zjcg": "http://www.zjzfcg.gov.cn/purchaseNotice/index.html?_=1507798106666"}
-        self.detail_url_zj = "http://www.zjzfcg.gov.cn/innerUsed_noticeDetails/index.html?noticeId=%s"
 
     def __del__(self):
         pass
@@ -42,6 +42,24 @@ class TenderMonitor(object):
         # for tender in list(reversed(tenders_zj)):
         # 正序排布，遇到重复ID，跳出
         for tender in tenders_zj:
+            # 如有重复ID，继续
+            if tender.get("noticeID") in notice_ids:
+                self.logger.info("ID %s is in DB list already" % tender.get("noticeID"))
+                continue
+            is_new = True
+            self.col_t.insert(tender)
+            self.logger.info("ID %s is inserted into DB successfully" % tender.get("noticeID"))
+        return is_new
+
+    def process_tender_hz(self):
+        is_new = False
+        notice_ids = [entry["noticeID"] for entry in self.col_t.find({}, {"noticeID": 1})]
+        notice_ids = list(set(notice_ids))
+        tenders_hz = self.th.get_tenders()
+        # # 反转排序
+        # for tender in list(reversed(tenders_zj)):
+        # 正序排布，遇到重复ID，跳出
+        for tender in tenders_hz:
             # 如有重复ID，继续
             if tender.get("noticeID") in notice_ids:
                 self.logger.info("ID %s is in DB list already" % tender.get("noticeID"))
@@ -98,9 +116,8 @@ class TenderMonitor(object):
             if not is_subject:
                 subject = "更新%s等%s条招标信息" % (tender.get("title"), self.col_t.find({"isNotice": False}).count())
                 is_subject = True
-            self.m.process_entry(tender.get("districtName"), tender.get("bidMenu"), tender.get("title"),
-                                 time.strftime("%Y-%m-%d", time.localtime(float(tender.get("pubDate")[:10]))),
-                                 self.detail_url_zj % tender.get("noticeID"))
+            self.m.process_entry(tender.get("districtName"), tender.get("src"), tender.get("title"),
+                                 tender.get("pubDate"), tender.get("url"))
         result = self.m.send_txt(self.config.get("mail").get("receivers"), subject)
         self.col_t.update_many({"isNotice": False}, {"$set": {"isNotice": True}})
         self.logger.info(

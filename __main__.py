@@ -28,7 +28,8 @@ if __name__ == '__main__':
     # 处理logfile
     logging.config.fileConfig(config.get("log"), disable_existing_loggers=True)
     t = TenderMonitor(config)
-    is_new = t.process_tender_zj()
-    if is_new:
+    is_zj_new = t.process_tender_zj()
+    is_hz_new = t.process_tender_hz()
+    if is_zj_new or is_hz_new:
         result = t.notices_mail()
     sys.exit(0)

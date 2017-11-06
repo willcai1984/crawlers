@@ -4,10 +4,10 @@
     ~~~~~~~~~~~~~~
     :copyright:...
 """
-import urllib.request
+import http.cookiejar
 import urllib.error
 import urllib.parse
-import http.cookiejar
+import urllib.request
 from urllib.request import HTTPCookieProcessor, ProxyHandler
 
 
