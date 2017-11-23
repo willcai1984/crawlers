@@ -33,7 +33,7 @@ mail_msg_header = '''
 mail_msg_footer = '''</tbody></table>'''
 
 mail_msg_entry = '''
-        <tr style="height: 28px;">
+        <tr style="height: 28px;background-color:%s;">
             <td align="center">%s</td>
             <td nowrap="nowrap" align="center">%s</td>
             <td nowrap="nowrap" align="center">%s</td>
@@ -58,7 +58,12 @@ class Email(object):
         self.s.close()
 
     def process_entry(self, dist, src, title, public, link):
-        entry_msg = mail_msg_entry % (self.id, dist, src, title, public, link)
+        if self.id % 2:
+            # 奇数行
+            entry_msg = mail_msg_entry % ("#ffffff", self.id, dist, src, title, public, link)
+        else:
+            # 偶数行
+            entry_msg = mail_msg_entry % ("#eeeeee", self.id, dist, src, title, public, link)
         self.mail_msg_entry_list.append(entry_msg)
         self.id += 1
 
