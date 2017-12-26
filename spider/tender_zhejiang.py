@@ -60,15 +60,14 @@ class TenderZheJiang(object):
         tenders = []
         for article in articles:
             model = deepcopy(self.model)
-            model["noticeID"] = article.get("noticeId")
+            model["noticeID"] = article.get("id")
             model["bidMenu"] = article.get("mainBidMenuName")
-            model["title"] = article.get("noticeTitle")
+            model["title"] = article.get("title")
             model["projectCode"] = article.get("projectCode")
-            model["endDate"] = time.strftime("%Y-%m-%d", time.localtime(float(article.get("noticeEndDate")[:10])))
-            model["pubDate"] = time.strftime("%Y-%m-%d", time.localtime(float(article.get("noticePubDate")[:10])))
+            # model["endDate"] = time.strftime("%Y-%m-%d", time.localtime(float(article.get("noticeEndDate")[:10])))
+            model["pubDate"] = time.strftime("%Y-%m-%d", time.localtime(float(article.get("pubDate")[:10])))
             model["districtName"] = article.get("districtName")
-            model["url"] = "http://www.zjzfcg.gov.cn/innerUsed_noticeDetails/index.html?noticeId=%s" % article.get(
-                "noticeId")
+            model["url"] = article.get("url")
             tenders.append(model)
         return tenders
 
