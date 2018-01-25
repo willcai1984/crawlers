@@ -11,6 +11,7 @@ from .mail import Email
 from .mongo import Mongo
 from .tender_hangzhou import TenderHangzhou
 from .tender_zhejiang import TenderZheJiang
+from .tender_zju import TenderZJU
 from .wechat import Wechat
 
 
@@ -27,6 +28,7 @@ class TenderMonitor(object):
         self.col_token = self.m.get_utc_col(db_info['collections']['tokens'])
         self.tz = TenderZheJiang()
         self.th = TenderHangzhou()
+        self.tzju = TenderZJU()
         self.w = Wechat()
         self.m = Email()
 
@@ -60,6 +62,24 @@ class TenderMonitor(object):
         # for tender in list(reversed(tenders_zj)):
         # 正序排布，遇到重复ID，跳出
         for tender in tenders_hz:
+            # 如有重复ID，继续
+            if tender.get("noticeID") in notice_ids:
+                self.logger.info("ID %s is in DB list already" % tender.get("noticeID"))
+                continue
+            is_new = True
+            self.col_t.insert(tender)
+            self.logger.info("ID %s is inserted into DB successfully" % tender.get("noticeID"))
+        return is_new
+
+    def process_tender_zju(self):
+        is_new = False
+        notice_ids = [entry["noticeID"] for entry in self.col_t.find({}, {"noticeID": 1})]
+        notice_ids = list(set(notice_ids))
+        tenders_zju = self.tzju.get_tenders()
+        # # 反转排序
+        # for tender in list(reversed(tenders_zj)):
+        # 正序排布，遇到重复ID，跳出
+        for tender in tenders_zju:
             # 如有重复ID，继续
             if tender.get("noticeID") in notice_ids:
                 self.logger.info("ID %s is in DB list already" % tender.get("noticeID"))

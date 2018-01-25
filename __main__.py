@@ -30,6 +30,7 @@ if __name__ == '__main__':
     t = TenderMonitor(config)
     is_zj_new = t.process_tender_zj()
     is_hz_new = t.process_tender_hz()
-    if is_zj_new or is_hz_new:
+    is_zju_new = t.process_tender_zju()
+    if is_zj_new or is_hz_new or is_zju_new:
         result = t.notices_mail()
     sys.exit(0)
