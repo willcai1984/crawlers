@@ -28,7 +28,7 @@ class TenderMonitor(object):
         self.th = TenderHangzhou()
         self.tzju = TenderZJU()
         # self.w = Wechat()
-        self.m = Email()
+        self.e = Email()
 
     def __del__(self):
         self.m.con.close()
@@ -134,10 +134,10 @@ class TenderMonitor(object):
             if not is_subject:
                 subject = "更新%s等%s条招标信息" % (tender.get("title"), self.col_t.find({"isNotice": False}).count())
                 is_subject = True
-            self.m.process_entry(tender.get("districtName"), tender.get("src"), tender.get("title"),
+            self.e.process_entry(tender.get("districtName"), tender.get("src"), tender.get("title"),
                                  tender.get("pubDate"), tender.get("url"))
         receiver = self.col_m.find_one({}).get("receivers")
-        result = self.m.send_txt(receiver, subject)
+        result = self.e.send_txt(receiver, subject)
         self.col_t.update_many({"isNotice": False}, {"$set": {"isNotice": True}})
         self.logger.info(
             "Mail send result is %s, update all records' is_notice status to True successfully" % result)
