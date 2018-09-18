@@ -55,7 +55,7 @@ class TenderZheJiang(object):
                   )
         search_url = url + urllib.parse.urlencode(values)
         content = self.s.get_content(search_url)
-        tender_dict = json.loads(content)
+        tender_dict = json.loads(content.decode('utf-8'))
         articles = tender_dict.get("articles")
         tenders = []
         for article in articles:
